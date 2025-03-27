@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreAuditoriaRequest;
 use App\Services\Auditorias\AuditoriaService;
 use App\Services\Auditorias\ImagemItemAuditoriaService;
 use App\Services\Auditorias\ItemAuditoriaService;
@@ -11,8 +12,7 @@ use Illuminate\Http\Request;
 class AuditoriaController extends Controller
 {
     public function __construct(protected AuditoriaService $auditoriaService, 
-                                protected ItemAuditoriaService $itemService, 
-                                protected ImagemItemAuditoriaService $imagemService){}
+                                protected ItemAuditoriaService $itemService){}
     public function index()
     {
         return view('auditorias.index');
@@ -23,18 +23,8 @@ class AuditoriaController extends Controller
         return view('auditorias.create');
     }
 
-    public function store(Request $request)
+    public function store(StoreAuditoriaRequest $request)
     {
-        $request->validate([
-            'nome' => 'required',
-            'descricao_ponto' => 'required|array',
-            'descricao_orientacao' => 'required|array',
-            'descricao_acao_realizada' => 'required|array',
-            'descricao_acao_sugestiva' => 'required|array',
-            'descricao_acao_complementar' => 'required|array',
-            'imagem.*.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
-        ]);
-    
         $dadosAuditoria = [
             'nome' => $request->nome,
             'user_id' => auth()->id()
