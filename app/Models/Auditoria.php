@@ -20,8 +20,8 @@ class Auditoria extends Model
         return $this->hasMany(ItemAuditoria::class);
     }
 
-    public function usuario()
+    public function user()
     {
-        return $this->belongsTo(User::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }

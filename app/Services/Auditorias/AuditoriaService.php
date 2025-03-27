@@ -11,6 +11,11 @@ class AuditoriaService{
         
     }
 
+    public function obterAuditoriasPaginadas($perPage = 10)
+    {
+        return $this->auditoriaRepository->listarAuditoriasPaginadas($perPage);
+    }
+    
     public function criarAuditoria(array $dados){
         return $this->auditoriaRepository->salvar($dados);
     }

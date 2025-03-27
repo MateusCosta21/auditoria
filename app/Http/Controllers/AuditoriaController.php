@@ -11,11 +11,14 @@ use Illuminate\Http\Request;
 
 class AuditoriaController extends Controller
 {
-    public function __construct(protected AuditoriaService $auditoriaService, 
-                                protected ItemAuditoriaService $itemService){}
+    public function __construct(
+        protected AuditoriaService $auditoriaService,
+        protected ItemAuditoriaService $itemService
+    ) {}
     public function index()
     {
-        return view('auditorias.index');
+        $auditorias = $this->auditoriaService->obterAuditoriasPaginadas(10);
+        return view('auditorias.index', compact('auditorias'));
     }
 
     public function create()
@@ -29,9 +32,9 @@ class AuditoriaController extends Controller
             'nome' => $request->nome,
             'user_id' => auth()->id()
         ];
-    
+
         $auditoria = $this->auditoriaService->criarAuditoria($dadosAuditoria);
-    
+
         $this->itemService->criarItensAuditoria(
             $auditoria->id,
             $request->only([
@@ -43,9 +46,7 @@ class AuditoriaController extends Controller
             ]),
             $request->file('imagem', [])
         );
-    
+
         return redirect()->route('auditorias.index')->with('success', 'Auditoria criada com sucesso!');
     }
-    
-    
 }
