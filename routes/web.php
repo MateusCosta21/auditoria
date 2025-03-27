@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -15,8 +16,9 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    Route::get('/auditorias', function () {return view('auditorias.index');})->name('auditorias.index');
-    Route::get('/criar', function () {return view('auditorias.create');})->name('auditorias.create');
+    Route::get('/auditorias', [AuditoriaController::class, 'index'])->name('auditorias.index');
+    Route::get('/criar', [AuditoriaController::class, 'create'])->name('auditorias.create');
+    Route::get('/store', [AuditoriaController::class, 'store'])->name('auditorias.store');
 
 });
 
