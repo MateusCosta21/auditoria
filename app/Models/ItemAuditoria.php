@@ -6,7 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class ItemAuditoria extends Model
-{
+{    
+    protected $table = 'itens_auditoria';
     use HasFactory;
 
     // Definir os campos que podem ser preenchidos em massa

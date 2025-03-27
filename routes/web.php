@@ -18,7 +18,7 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::get('/auditorias', [AuditoriaController::class, 'index'])->name('auditorias.index');
     Route::get('/criar', [AuditoriaController::class, 'create'])->name('auditorias.create');
-    Route::get('/store', [AuditoriaController::class, 'store'])->name('auditorias.store');
+    Route::post('/store', [AuditoriaController::class, 'store'])->name('auditorias.store');
 
 });
 

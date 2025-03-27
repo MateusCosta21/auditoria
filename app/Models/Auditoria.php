@@ -10,7 +10,7 @@ class Auditoria extends Model
     use HasFactory;
     protected $fillable = [
         'nome', 
-        'usuario_id', 
+        'user_id', 
         'status', 
         'data_inicio',
     ];

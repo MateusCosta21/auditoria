@@ -2,7 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Auditoria;
+use App\Models\ItemAuditoria;
+use App\Models\ImagensItemAuditoria;
 use Illuminate\Http\Request;
+
 
 class AuditoriaController extends Controller
 {
@@ -22,58 +26,57 @@ class AuditoriaController extends Controller
             'nome' => 'required',
             'imagem.*' => 'nullable|image|mimes:jpg,jpeg,png,gif',
         ]);
-
-        // Criar nova auditoria
+        $descricao = implode("\n", $request->descricao_ponto); 
+     
         $auditoria = Auditoria::create([
             'nome' => $request->nome,
-            'usuario_id' => auth()->id(),
+            'user_id' => auth()->user()->id
         ]);
 
         $item = ItemAuditoria::create([
             'auditoria_id' => $auditoria->id,
             'tipo' => 'Ponto Auditado',
-            'descricao' => $request->descricao_ponto, 
+            'descricao' => $descricao, 
             'ordem' => 1,  
         ]);
 
         ItemAuditoria::create([
             'auditoria_id' => $auditoria->id,
             'tipo' => 'Orientação Realizada',
-            'descricao' => $request->descricao_orientacao,
+            'descricao' => $descricao,
             'ordem' => 2,
         ]);
 
         ItemAuditoria::create([
             'auditoria_id' => $auditoria->id,
             'tipo' => 'Ação Realizada',
-            'descricao' => $request->descricao_acao_realizada,
+            'descricao' => $descricao,
             'ordem' => 3,
         ]);
 
         ItemAuditoria::create([
             'auditoria_id' => $auditoria->id,
             'tipo' => 'Ação Sugestiva',
-            'descricao' => $request->descricao_acao_sugestiva,
+            'descricao' => $descricao,
             'ordem' => 4,
         ]);
 
         ItemAuditoria::create([
             'auditoria_id' => $auditoria->id,
             'tipo' => 'Ação Complementar',
-            'descricao' => $request->descricao_acao_complementar,
+            'descricao' => $descricao,
             'ordem' => 5,
         ]);
 
         if ($request->has('imagem')) {
             foreach ($request->imagem as $index => $imagem) {
                 $path = $imagem->store('auditorias/imagens');
-                ImagemItemAuditoria::create([
+                ImagensItemAuditoria::create([
                     'item_auditoria_id' => $item->id, 
                     'caminho_imagem' => $path,
                 ]);
             }
         }
-
-        return redirect()->route('auditorias.show', $auditoria->id)->with('success', 'Auditoria criada com sucesso!');
+        return redirect()->route('auditorias.index', $auditoria->id)->with('success', 'Auditoria criada com sucesso!');
     }
 }

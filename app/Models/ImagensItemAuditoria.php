@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class ImagensItemAuditoria extends Model
 {
     use HasFactory;
+    protected $table = 'imagens_itens_auditoria';
 
     // Definir os campos que podem ser preenchidos em massa
     protected $fillable = [
