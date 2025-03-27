@@ -9,9 +9,8 @@
             <thead class="thead-dark">
                 <tr>
                     <th>#</th>
-                    <th>Nome da Auditoria</th>
-                    <th>Data da Criação</th>
-                    <th>Responsável</th>
+                    <th>Nome Cliente</th>
+                    <th>Cnpj </th>
                     <th>Ações</th>
                 </tr>
             </thead>
@@ -23,9 +22,9 @@
                     <td>{{ $auditoria->created_at->format('d/m/Y H:i') }}</td>
                     <td>{{ $auditoria->user->name ?? 'Desconhecido' }}</td>
                     <td>
-                    <a href="{{ route('auditorias.pdf', $auditoria->id) }}" class="btn btn-sm btn-primary">
-                        <i class="fa fa-file-pdf-o"></i> Baixar PDF
-                    </a>
+                        <a href="{{ route('auditoria.pdf', $auditoria->id) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-file-pdf-o"></i> Baixar PDF
+                        </a>
                     </td>
                 </tr>
                 @endforeach

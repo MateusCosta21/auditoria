@@ -12,12 +12,18 @@ class Auditoria extends Model
         'nome', 
         'user_id', 
         'status', 
+        'id_cliente',
         'data_inicio',
     ];
 
     public function itens()
     {
         return $this->hasMany(ItemAuditoria::class);
+    }
+
+    public function cliente()
+    {
+        return $this->belongsTo(Cliente::class, 'id_cliente');
     }
 
     public function user()

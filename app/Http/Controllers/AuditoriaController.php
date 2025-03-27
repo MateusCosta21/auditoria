@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreAuditoriaRequest;
+use App\Models\Cliente;
 use App\Services\Auditorias\AuditoriaService;
 use App\Services\Auditorias\ImagemItemAuditoriaService;
 use App\Services\Auditorias\ItemAuditoriaService;
@@ -23,16 +24,18 @@ class AuditoriaController extends Controller
 
     public function create()
     {
-        return view('auditorias.create');
+        $clientes = Cliente::all();  
+        return view('auditorias.create', compact('clientes'));
     }
 
     public function store(StoreAuditoriaRequest $request)
     {
         $dadosAuditoria = [
             'nome' => $request->nome,
-            'user_id' => auth()->id()
+            'user_id' => auth()->id(),
+            'id_cliente' => (int) $request->id_cliente
         ];
-
+    
         $auditoria = $this->auditoriaService->criarAuditoria($dadosAuditoria);
 
         $this->itemService->criarItensAuditoria(

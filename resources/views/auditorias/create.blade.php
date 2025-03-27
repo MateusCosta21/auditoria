@@ -16,12 +16,20 @@
                     </ul>
                 </div>
             @endif
-
+            <div class="form-group">
+            <label for="id_cliente">Cliente</label>
+            <select class="form-control" id="id_cliente" name="id_cliente" required>
+                <option value="">Selecione um Cliente</option>
+                @foreach($clientes as $cliente)
+                    <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                @endforeach
+            </select>
+        </div>
             <div class="mb-4">
                 <label for="nome" class="form-label">Nome da Auditoria</label>
                 <input type="text" name="nome" id="nome" class="form-control" required>
             </div>
-
+    
             <div id="pontos-container">
                 <div class="ponto-section" id="ponto-1">
                     <h3>Ponto Auditado #1</h3>

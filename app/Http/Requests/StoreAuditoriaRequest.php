@@ -15,6 +15,7 @@ class StoreAuditoriaRequest extends FormRequest
     {
         return [
             'nome' => 'required|string|max:255',
+            'id_cliente' => 'required|int',
             'descricao_ponto' => 'required|array',
             'descricao_orientacao' => 'required|array',
             'descricao_acao_realizada' => 'required|array',
