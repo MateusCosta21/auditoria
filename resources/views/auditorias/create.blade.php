@@ -16,57 +16,26 @@
                     </ul>
                 </div>
             @endif
+
             <div class="form-group">
-            <label for="id_cliente">Cliente</label>
-            <select class="form-control" id="id_cliente" name="id_cliente" required>
-                <option value="">Selecione um Cliente</option>
-                @foreach($clientes as $cliente)
-                    <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
-                @endforeach
-            </select>
-        </div>
+                <label for="id_cliente">Cliente</label>
+                <select class="form-control" id="id_cliente" name="id_cliente" required>
+                    <option value="">Selecione um Cliente</option>
+                    @foreach($clientes as $cliente)
+                        <option value="{{ $cliente->id }}">{{ $cliente->nome }}</option>
+                    @endforeach
+                </select>
+            </div>
+
             <div class="mb-4">
                 <label for="nome" class="form-label">Nome da Auditoria</label>
                 <input type="text" name="nome" id="nome" class="form-control" required>
             </div>
-    
-            <div id="pontos-container">
-                <div class="ponto-section" id="ponto-1">
-                    <h3>Ponto Auditado #1</h3>
 
-                    <div class="mb-4">
-                        <label for="descricao_ponto_1" class="form-label">Descrição do Ponto a ser Auditado</label>
-                        <textarea name="descricao_ponto[]" id="descricao_ponto_1" class="form-control" rows="3" required></textarea>
-                    </div>
+            <button type="button" class="btn btn-secondary" id="add-setor-btn">Adicionar Setor</button>
 
-                    <h4>Orientação Realizada</h4>
-                    <div class="mb-4">
-                        <textarea name="descricao_orientacao[]" class="form-control" rows="3" required></textarea>
-                    </div>
+            <div id="setores-container"></div>
 
-                    <h4>Ação Realizada</h4>
-                    <div class="mb-4">
-                        <textarea name="descricao_acao_realizada[]" class="form-control" rows="3" required></textarea>
-                    </div>
-
-                    <h4>Ação Sugestiva</h4>
-                    <div class="mb-4">
-                        <textarea name="descricao_acao_sugestiva[]" class="form-control" rows="3" required></textarea>
-                    </div>
-
-                    <h4>Ação Complementar</h4>
-                    <div class="mb-4">
-                        <textarea name="descricao_acao_complementar[]" class="form-control" rows="3" required></textarea>
-                    </div>
-
-                    <h4>Adicionar Imagens</h4>
-                    <div class="mb-4">
-                        <input type="file" name="imagem[]" class="form-control" multiple>
-                    </div>
-                </div>
-            </div>
-
-            <button type="button" class="btn btn-secondary" id="add-ponto-btn">Adicionar Novo Ponto</button>
             <br><br>
 
             <button type="submit" class="btn btn-primary">Iniciar Auditoria</button>
@@ -74,32 +43,73 @@
     </div>
 
     <script>
-        let pontoCount = 1;
+        let setorCount = 0;
+        let pontoCount = 0;
 
-        document.getElementById('add-ponto-btn').addEventListener('click', function() {
-    pontoCount++;
+        document.getElementById('add-setor-btn').addEventListener('click', function () {
+            setorCount++;
 
-    // Clonar a primeira seção de ponto
-    const pontoSection = document.getElementById('ponto-1').cloneNode(true);
-    pontoSection.id = 'ponto-' + pontoCount;
+            const setorDiv = document.createElement('div');
+            setorDiv.classList.add('setor-section', 'mt-4', 'p-3', 'border', 'rounded');
+            setorDiv.id = 'setor-' + setorCount;
 
-    // Limpar os campos do novo ponto
-    pontoSection.querySelectorAll('textarea').forEach((textarea) => {
-        textarea.value = '';  // Limpa o conteúdo
-        textarea.id = textarea.id.replace(/\d+/, pontoCount);
-        textarea.name = textarea.name.replace(/\[\d+\]/, '[' + (pontoCount - 1) + ']');
-    });
+            setorDiv.innerHTML = `
+                <h3>Setor #${setorCount}</h3>
+                <div class="mb-3">
+                    <label for="setor_nome_${setorCount}" class="form-label">Nome do Setor</label>
+                    <input type="text" name="setor_nome[]" id="setor_nome_${setorCount}" class="form-control" required>
+                </div>
+                <button type="button" class="btn btn-info add-ponto-btn" data-setor="${setorCount}">Adicionar Ponto Auditado</button>
+                <div id="pontos-container-${setorCount}" class="mt-3"></div>
+            `;
 
-    pontoSection.querySelectorAll('input[type="file"]').forEach((input) => {
-        input.value = '';  // Reseta o campo de arquivo
-        input.name = 'imagem[' + (pontoCount - 1) + '][]';  // Atualiza o nome do campo de imagem corretamente
-    });
+            document.getElementById('setores-container').appendChild(setorDiv);
+        });
 
-    // Atualiza o título do ponto
-    pontoSection.querySelector('h3').textContent = 'Ponto Auditado #' + pontoCount;
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('add-ponto-btn')) {
+                pontoCount++;
+                const setorId = event.target.getAttribute('data-setor');
+                const pontosContainer = document.getElementById('pontos-container-' + setorId);
 
-    // Adicionar o novo ponto à lista
-    document.getElementById('pontos-container').appendChild(pontoSection);
-});
+                const pontoDiv = document.createElement('div');
+                pontoDiv.classList.add('ponto-section', 'mt-3', 'p-3', 'border', 'rounded');
+                pontoDiv.id = `ponto-${pontoCount}`;
+
+                pontoDiv.innerHTML = `
+                    <h4>Ponto Auditado #${pontoCount}</h4>
+                    <div class="mb-3">
+                        <label for="descricao_ponto_${pontoCount}" class="form-label">Descrição do Ponto Auditado</label>
+                        <textarea name="descricao_ponto[${setorId}][]" id="descricao_ponto_${pontoCount}" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Orientação Realizada</label>
+                        <textarea name="descricao_orientacao[${setorId}][]" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Realizada em</label>
+                        <input type="date" name="realizada_em[${setorId}][]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Ação Sugerida</label>
+                        <textarea name="descricao_acao_sugestiva[${setorId}][]" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Anotações Complementares</label>
+                        <textarea name="descricao_acao_complementar[${setorId}][]" class="form-control" rows="2" required></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Prazo Estabelecido</label>
+                        <input type="date" name="prazo_estabelecido[${setorId}][]" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Adicionar Imagens</label>
+                        <input type="file" name="imagem[${setorId}][${pontoCount}][]" class="form-control" multiple>
+                    </div>
+                `;
+
+                pontosContainer.appendChild(pontoDiv);
+            }
+        });
     </script>
 @endsection

@@ -37,19 +37,22 @@ class AuditoriaController extends Controller
         ];
     
         $auditoria = $this->auditoriaService->criarAuditoria($dadosAuditoria);
-
+    
         $this->itemService->criarItensAuditoria(
             $auditoria->id,
             $request->only([
+                'setor',
                 'descricao_ponto',
                 'descricao_orientacao',
                 'descricao_acao_realizada',
                 'descricao_acao_sugestiva',
                 'descricao_acao_complementar',
+                'realizada_em',
+                'prazo_estabelecido'
             ]),
             $request->file('imagem', [])
         );
-
+    
         return redirect()->route('auditorias.index')->with('success', 'Auditoria criada com sucesso!');
     }
 }

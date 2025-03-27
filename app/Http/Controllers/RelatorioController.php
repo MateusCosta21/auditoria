@@ -11,7 +11,7 @@ class RelatorioController extends Controller
     public function gerarPDF($id)
     {
         $auditoria = Auditoria::with(['itens', 'itens.imagens'])->findOrFail($id);
-
+        dd($auditoria);
         // Alterado para o caminho correto da view
         $pdf = PDF::loadView('relatorios.auditoria', compact('auditoria'));
 
