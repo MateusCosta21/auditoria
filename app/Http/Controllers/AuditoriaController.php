@@ -24,59 +24,68 @@ class AuditoriaController extends Controller
     {
         $request->validate([
             'nome' => 'required',
-            'imagem.*' => 'nullable|image|mimes:jpg,jpeg,png,gif',
+            'descricao_ponto' => 'required|array',
+            'descricao_orientacao' => 'required|array',
+            'descricao_acao_realizada' => 'required|array',
+            'descricao_acao_sugestiva' => 'required|array',
+            'descricao_acao_complementar' => 'required|array',
+            'imagem.*.*' => 'nullable|image|mimes:jpg,jpeg,png,gif|max:2048',
         ]);
-        $descricao = implode("\n", $request->descricao_ponto); 
-     
+    
         $auditoria = Auditoria::create([
             'nome' => $request->nome,
-            'user_id' => auth()->user()->id
+            'user_id' => auth()->id()
         ]);
-
-        $item = ItemAuditoria::create([
-            'auditoria_id' => $auditoria->id,
-            'tipo' => 'Ponto Auditado',
-            'descricao' => $descricao, 
-            'ordem' => 1,  
-        ]);
-
-        ItemAuditoria::create([
-            'auditoria_id' => $auditoria->id,
-            'tipo' => 'Orientação Realizada',
-            'descricao' => $descricao,
-            'ordem' => 2,
-        ]);
-
-        ItemAuditoria::create([
-            'auditoria_id' => $auditoria->id,
-            'tipo' => 'Ação Realizada',
-            'descricao' => $descricao,
-            'ordem' => 3,
-        ]);
-
-        ItemAuditoria::create([
-            'auditoria_id' => $auditoria->id,
-            'tipo' => 'Ação Sugestiva',
-            'descricao' => $descricao,
-            'ordem' => 4,
-        ]);
-
-        ItemAuditoria::create([
-            'auditoria_id' => $auditoria->id,
-            'tipo' => 'Ação Complementar',
-            'descricao' => $descricao,
-            'ordem' => 5,
-        ]);
-
-        if ($request->has('imagem')) {
-            foreach ($request->imagem as $index => $imagem) {
-                $path = $imagem->store('auditorias/imagens');
-                ImagensItemAuditoria::create([
-                    'item_auditoria_id' => $item->id, 
-                    'caminho_imagem' => $path,
-                ]);
+    
+        foreach ($request->descricao_ponto as $index => $descricao) {
+            $item = ItemAuditoria::create([
+                'auditoria_id' => $auditoria->id,
+                'tipo' => 'Ponto Auditado',
+                'descricao' => $descricao,
+                'ordem' => 1,
+            ]);
+    
+            ItemAuditoria::create([
+                'auditoria_id' => $auditoria->id,
+                'tipo' => 'Orientação Realizada',
+                'descricao' => $request->descricao_orientacao[$index] ?? '',
+                'ordem' => 2,
+            ]);
+    
+            ItemAuditoria::create([
+                'auditoria_id' => $auditoria->id,
+                'tipo' => 'Ação Realizada',
+                'descricao' => $request->descricao_acao_realizada[$index] ?? '',
+                'ordem' => 3,
+            ]);
+    
+            ItemAuditoria::create([
+                'auditoria_id' => $auditoria->id,
+                'tipo' => 'Ação Sugestiva',
+                'descricao' => $request->descricao_acao_sugestiva[$index] ?? '',
+                'ordem' => 4,
+            ]);
+    
+            ItemAuditoria::create([
+                'auditoria_id' => $auditoria->id,
+                'tipo' => 'Ação Complementar',
+                'descricao' => $request->descricao_acao_complementar[$index] ?? '',
+                'ordem' => 5,
+            ]);
+    
+            // Verifica se há imagens enviadas para este ponto
+            if ($request->hasFile("imagem.$index")) {
+                foreach ($request->file("imagem.$index") as $imagem) {
+                    $path = $imagem->store('auditorias/imagens');
+                    ImagensItemAuditoria::create([
+                        'item_auditoria_id' => $item->id,
+                        'caminho_imagem' => $path,
+                    ]);
+                }
             }
         }
-        return redirect()->route('auditorias.index', $auditoria->id)->with('success', 'Auditoria criada com sucesso!');
+    
+        return redirect()->route('auditorias.index')->with('success', 'Auditoria criada com sucesso!');
     }
+    
 }

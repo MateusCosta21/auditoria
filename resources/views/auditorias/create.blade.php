@@ -69,28 +69,29 @@
         let pontoCount = 1;
 
         document.getElementById('add-ponto-btn').addEventListener('click', function() {
-            pontoCount++;
+    pontoCount++;
 
-            // Clonar a primeira seção de ponto
-            const pontoSection = document.getElementById('ponto-1').cloneNode(true);
-            pontoSection.id = 'ponto-' + pontoCount;
+    // Clonar a primeira seção de ponto
+    const pontoSection = document.getElementById('ponto-1').cloneNode(true);
+    pontoSection.id = 'ponto-' + pontoCount;
 
-            // Atualizar os IDs e os nomes dos inputs
-            pontoSection.querySelectorAll('textarea').forEach((textarea) => {
-                textarea.id = textarea.id.replace('1', pontoCount);
-                textarea.name = textarea.name.replace('[]', '[' + (pontoCount - 1) + ']');
-            });
+    // Limpar os campos do novo ponto
+    pontoSection.querySelectorAll('textarea').forEach((textarea) => {
+        textarea.value = '';  // Limpa o conteúdo
+        textarea.id = textarea.id.replace(/\d+/, pontoCount);
+        textarea.name = textarea.name.replace(/\[\d+\]/, '[' + (pontoCount - 1) + ']');
+    });
 
-            pontoSection.querySelectorAll('input[type="file"]').forEach((input) => {
-                input.name = 'imagem[' + (pontoCount - 1) + '][]';  // Atualiza o nome do campo de imagem
-            });
+    pontoSection.querySelectorAll('input[type="file"]').forEach((input) => {
+        input.value = '';  // Reseta o campo de arquivo
+        input.name = 'imagem[' + (pontoCount - 1) + '][]';  // Atualiza o nome do campo de imagem corretamente
+    });
 
-            // Atualiza o título do ponto
-            const pontoTitle = pontoSection.querySelector('h3');
-            pontoTitle.innerHTML = 'Ponto Auditado #' + pontoCount;
+    // Atualiza o título do ponto
+    pontoSection.querySelector('h3').textContent = 'Ponto Auditado #' + pontoCount;
 
-            // Adicionar o novo ponto à lista
-            document.getElementById('pontos-container').appendChild(pontoSection);
-        });
+    // Adicionar o novo ponto à lista
+    document.getElementById('pontos-container').appendChild(pontoSection);
+});
     </script>
 @endsection
