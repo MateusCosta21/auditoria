@@ -4,40 +4,38 @@
 <div class="container">
     <h1 class="mb-4">Auditorias Realizadas</h1>
 
-    @if ($auditorias->isEmpty())
-        <div class="alert alert-info">
-            Nenhuma auditoria cadastrada ainda.
-        </div>
-    @else
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover">
-                <thead class="thead-dark">
-                    <tr>
-                        <th>#</th>
-                        <th>Nome</th>
-                        <th>Usuário</th>
-                        <th>Data</th>
-                        <th>Ações</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($auditorias as $index => $auditoria)
-                        <tr>
-                            <td>{{ $loop->iteration + ($auditorias->currentPage() - 1) * $auditorias->perPage() }}</td>
-                            <td>{{ $auditoria->nome }}</td>
-                            <td>{{ $auditoria->user->name ?? 'Desconhecido' }}</td>
-                            <td>{{ $auditoria->created_at->format('d/m/Y H:i') }}</td>
-                            <td>
-                                <button class="btn btn-secondary btn-sm" disabled>Visualizar</button>
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-        <div class="d-flex justify-content-center">
-            {{ $auditorias->links() }}
-        </div>
-    @endif
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped">
+            <thead class="thead-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Nome da Auditoria</th>
+                    <th>Data da Criação</th>
+                    <th>Responsável</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach ($auditorias as $auditoria)
+                <tr>
+                    <td>{{ $loop->iteration }}</td>
+                    <td>{{ $auditoria->nome }}</td>
+                    <td>{{ $auditoria->created_at->format('d/m/Y H:i') }}</td>
+                    <td>{{ $auditoria->user->name ?? 'Desconhecido' }}</td>
+                    <td>
+                        <a href="{{ route('auditoria.pdf', $auditoria->id) }}" class="btn btn-sm btn-primary">
+                            <i class="fa fa-file-pdf-o"></i> Baixar PDF
+                        </a>
+                    </td>
+                </tr>
+                @endforeach
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Paginação -->
+    <div class="d-flex justify-content-center mt-3">
+        {{ $auditorias->links() }}
+    </div>
 </div>
 @endsection

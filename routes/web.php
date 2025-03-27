@@ -2,7 +2,9 @@
 
 use App\Http\Controllers\AuditoriaController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\RelatorioController;
 use Illuminate\Support\Facades\Route;
+
 
 Route::get('/', function () {
     return redirect('/login');
@@ -19,6 +21,7 @@ Route::middleware('auth')->group(function () {
     Route::get('/auditorias', [AuditoriaController::class, 'index'])->name('auditorias.index');
     Route::get('/criar', [AuditoriaController::class, 'create'])->name('auditorias.create');
     Route::post('/store', [AuditoriaController::class, 'store'])->name('auditorias.store');
+    Route::get('/auditoria/{id}/pdf', [RelatorioController::class, 'gerarPDF'])->name('auditoria.pdf');
 
 });
 
