@@ -37,11 +37,11 @@ class AuditoriaController extends Controller
         ];
     
         $auditoria = $this->auditoriaService->criarAuditoria($dadosAuditoria);
-    
+   
         $this->itemService->criarItensAuditoria(
             $auditoria->id,
             $request->only([
-                'setor',
+                'setor_nome',
                 'descricao_ponto',
                 'descricao_orientacao',
                 'descricao_acao_realizada',
