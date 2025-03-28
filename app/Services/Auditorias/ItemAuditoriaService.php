@@ -88,7 +88,7 @@ class ItemAuditoriaService
 
     private function salvarImagem(int $itemId, UploadedFile $imagem)
     {
-        $path = $imagem->store('auditorias/imagens');
+        $path = $imagem->store('auditorias/imagens', 'public');
         $this->imagemItemAuditoriaRepository->salvar([
             'item_auditoria_id' => $itemId,
             'caminho_imagem' => $path,

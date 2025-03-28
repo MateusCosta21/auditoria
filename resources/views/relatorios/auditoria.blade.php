@@ -144,8 +144,18 @@
                     @endforeach
                 </tr>
             </tbody>
-
         </table>
+
+        {{-- Exibição das imagens associadas aos itens do setor atual --}}
+        <div class="anexos">
+            @foreach ($setorItem['itens'] as $item)
+            @foreach ($item->imagens as $imagem)
+            <img
+                src="{{ $imagem->caminho_absoluto }}"
+                alt="Imagem do item auditado"
+                style="width:200px; height:auto; margin:10px; border-radius:4px; border:1px solid #ccc;"> @endforeach
+            @endforeach
+        </div>
     </div>
     @endforeach
 
