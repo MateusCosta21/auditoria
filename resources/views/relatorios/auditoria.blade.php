@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -59,7 +60,8 @@
             margin-top: 10px;
         }
 
-        .table th, .table td {
+        .table th,
+        .table td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
@@ -83,6 +85,7 @@
         }
     </style>
 </head>
+
 <body>
 
     <div class="header">
@@ -99,28 +102,53 @@
     </div>
 
     @foreach ($setoresComItens as $setorItem)
-        <div class="section">
-            <h3>Setor: {{ $setorItem['setor']->descricao }}</h3>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th>Ponto Auditado</th>
-                        <th>Orientação Realizada</th>
-                        <th>Realizada em</th>
-                        <th>Ação Realizada</th>
-                        <th>Ação Sugestiva</th>
-                        <th>Ação Complementar</th>
-                        <th>Prazo Estabelecido</th>
-                    </tr>
-                </thead>
-                <tbody>
-                @foreach ($setorItem['itens'] as $item)
-                        <td>{{ $item->descricao ?? 'N/A' }}</td>
+    <div class="section">
+        <h3>Setor: {{ $setorItem['setor']->descricao }}</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>Ponto Auditado</th>
+                    <th>Orientação Realizada</th>
+                    <th>Realizada em</th>
+                    <th>Ação Realizada</th>
+                    <th>Ação Sugestiva</th>
+                    <th>Ação Complementar</th>
+                    <th>Prazo Estabelecido</th>
+                </tr>
+            </thead>
+            <tbody>
+                @php $contador = 0; @endphp
+                <tr>
+                    @foreach ($setorItem['itens'] as $item)
+                    @php
+                    $valor = $item->descricao ?? 'N/A';
+
+                    // Se for a posição 3 ou 7 (índices 2 e 6), tenta formatar a data
+                    if (in_array($contador % 7, [2, 6]) && $valor !== 'N/A') {
+                    try {
+                    $valor = \Carbon\Carbon::parse($valor)->format('d/m/Y');
+                    } catch (\Exception $e) {
+                    // Se não for uma data válida, deixa como está
+                    }
+                    }
+                    @endphp
+
+                    <td>{{ $valor }}</td>
+
+                    @php $contador++; @endphp
+
+                    @if ($contador % 7 === 0)
+                </tr>
+                <tr>
+                    @endif
                     @endforeach
-                </tbody>
-            </table>
-        </div>
+                </tr>
+            </tbody>
+
+        </table>
+    </div>
     @endforeach
 
 </body>
+
 </html>

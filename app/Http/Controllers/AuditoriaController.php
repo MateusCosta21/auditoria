@@ -24,7 +24,7 @@ class AuditoriaController extends Controller
 
     public function create()
     {
-        $clientes = Cliente::all();  
+        $clientes = Cliente::all();
         return view('auditorias.create', compact('clientes'));
     }
 
@@ -35,9 +35,9 @@ class AuditoriaController extends Controller
             'user_id' => auth()->id(),
             'id_cliente' => (int) $request->id_cliente
         ];
-    
+
         $auditoria = $this->auditoriaService->criarAuditoria($dadosAuditoria);
-   
+
         $this->itemService->criarItensAuditoria(
             $auditoria->id,
             $request->only([
@@ -52,7 +52,7 @@ class AuditoriaController extends Controller
             ]),
             $request->file('imagem', [])
         );
-    
+
         return redirect()->route('auditorias.index')->with('success', 'Auditoria criada com sucesso!');
     }
 }
