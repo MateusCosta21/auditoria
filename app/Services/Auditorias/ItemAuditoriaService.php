@@ -18,15 +18,18 @@ class ItemAuditoriaService
 
     public function criarItensAuditoria(int $auditoriaId, array $dados, array $imagens = [])
     {
+        // Iterar sobre os setores
         foreach ($dados['setor_nome'] as $setorIndex => $setorNome) {
+            // Salvar o setor
             $setor = $this->itemAuditoriaRepository->salvar([
                 'auditoria_id' => $auditoriaId,
                 'tipo' => 'Setor',
                 'descricao' => $setorNome,
                 'ordem' => 0, 
             ]);
-            if (isset($dados['descricao_ponto'][1])) {  
-                foreach ($dados['descricao_ponto'][1] as $pontoIndex => $descricao) {
+    
+            if (isset($dados['descricao_ponto'][$setorIndex])) {
+                foreach ($dados['descricao_ponto'][$setorIndex] as $pontoIndex => $descricao) {
                     $ponto = $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Ponto Auditado',
@@ -37,45 +40,45 @@ class ItemAuditoriaService
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Orientação Realizada',
-                        'descricao' => $dados['descricao_orientacao'][1][$pontoIndex] ?? '',
+                        'descricao' => $dados['descricao_orientacao'][$setorIndex][$pontoIndex] ?? '',
                         'ordem' => 2,
                     ]);
     
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Ação Realizada',
-                        'descricao' => $dados['descricao_acao_realizada'][1][$pontoIndex] ?? '',
+                        'descricao' => $dados['descricao_acao_realizada'][$setorIndex][$pontoIndex] ?? '',
                         'ordem' => 3,
                     ]);
     
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Ação Sugestiva',
-                        'descricao' => $dados['descricao_acao_sugestiva'][1][$pontoIndex] ?? '',
+                        'descricao' => $dados['descricao_acao_sugestiva'][$setorIndex][$pontoIndex] ?? '',
                         'ordem' => 4,
                     ]);
     
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Ação Complementar',
-                        'descricao' => $dados['descricao_acao_complementar'][1][$pontoIndex] ?? '',
+                        'descricao' => $dados['descricao_acao_complementar'][$setorIndex][$pontoIndex] ?? '',
                         'ordem' => 5,
                     ]);
     
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Prazo Estabelecido',
-                        'descricao' => $dados['prazo_estabelecido'][1][$pontoIndex] ?? '',
+                        'descricao' => $dados['prazo_estabelecido'][$setorIndex][$pontoIndex] ?? '',
                         'ordem' => 6,
                     ]);
     
-                    if (!empty($imagens[1][$pontoIndex])) {
-                        foreach ($imagens[1][$pontoIndex] as $imagem) {
+                    if (!empty($imagens[$setorIndex][$pontoIndex])) {
+                        foreach ($imagens[$setorIndex][$pontoIndex] as $imagem) {
                             $this->salvarImagem($ponto->id, $imagem);
                         }
                     }
                 }
-            } 
+            }
         }
     }
     

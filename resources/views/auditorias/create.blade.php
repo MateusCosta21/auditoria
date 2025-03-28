@@ -10,7 +10,7 @@
         @if ($errors->any())
             <div class="alert alert-danger">
                 <ul>
-                    @foreach ($errors->all() as $error)
+                    @foreach($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
                 </ul>
@@ -79,8 +79,8 @@
             pontoDiv.innerHTML = `
                 <h4>Ponto Auditado #${pontoCount}</h4>
                 <div class="mb-3">
-                    <label for="descricao_ponto_${pontoCount}" class="form-label">Descrição do Ponto Auditado</label>
-                    <textarea name="descricao_ponto[${setorId}][]" id="descricao_ponto_${pontoCount}" class="form-control" rows="2" required></textarea>
+                    <label for="descricao_ponto_${setorId}_${pontoCount}" class="form-label">Descrição do Ponto Auditado</label>
+                    <textarea name="descricao_ponto[${setorId}][]" id="descricao_ponto_${setorId}_${pontoCount}" class="form-control" rows="2" required></textarea>
                 </div>
                 <div class="mb-3">
                     <label class="form-label">Orientação Realizada</label>
