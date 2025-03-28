@@ -45,6 +45,7 @@
 
         .section {
             margin-bottom: 30px;
+            page-break-inside: avoid;
         }
 
         .section h3 {
@@ -72,16 +73,23 @@
             color: #004a99;
         }
 
-        .table td {
-            background-color: #fff;
+        .page-break {
+            page-break-after: always;
         }
 
-        .anexos img {
-            width: 100px;
+        .pagina-imagens {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+            gap: 15px;
+        }
+
+        .pagina-imagens img {
+            width: 200px;
             height: auto;
-            margin: 5px;
-            border: 1px solid #ccc;
             border-radius: 4px;
+            border: 1px solid #ccc;
+            object-fit: cover;
         }
     </style>
 </head>
@@ -120,42 +128,38 @@
                 @php $contador = 0; @endphp
                 <tr>
                     @foreach ($setorItem['itens'] as $item)
-                    @php
-                    $valor = $item->descricao ?? 'N/A';
+                        @php
+                        $valor = $item->descricao ?? 'N/A';
 
-                    // Se for a posição 3 ou 7 (índices 2 e 6), tenta formatar a data
-                    if (in_array($contador % 7, [2, 6]) && $valor !== 'N/A') {
-                    try {
-                    $valor = \Carbon\Carbon::parse($valor)->format('d/m/Y');
-                    } catch (\Exception $e) {
-                    // Se não for uma data válida, deixa como está
-                    }
-                    }
-                    @endphp
+                        if (in_array($contador % 7, [2, 6]) && $valor !== 'N/A') {
+                            try {
+                                $valor = \Carbon\Carbon::parse($valor)->format('d/m/Y');
+                            } catch (\Exception $e) { }
+                        }
+                        @endphp
+                        <td>{{ $valor }}</td>
 
-                    <td>{{ $valor }}</td>
+                        @php $contador++; @endphp
 
-                    @php $contador++; @endphp
-
-                    @if ($contador % 7 === 0)
-                </tr>
-                <tr>
-                    @endif
+                        @if ($contador % 7 === 0)
+                            </tr><tr>
+                        @endif
                     @endforeach
                 </tr>
             </tbody>
         </table>
+    </div>
 
-        {{-- Exibição das imagens associadas aos itens do setor atual --}}
-        <div class="anexos">
-            @foreach ($setorItem['itens'] as $item)
+    <!-- Força quebra de página após cada tabela -->
+    <div class="page-break"></div>
+
+    <!-- Página separada exclusiva para imagens -->
+    <div class="pagina-imagens">
+        @foreach ($setorItem['itens'] as $item)
             @foreach ($item->imagens as $imagem)
-            <img
-                src="{{ $imagem->caminho_absoluto }}"
-                alt="Imagem do item auditado"
-                style="width:200px; height:auto; margin:10px; border-radius:4px; border:1px solid #ccc;"> @endforeach
+                <img src="{{ $imagem->caminho_absoluto }}" alt="Imagem do item auditado">
             @endforeach
-        </div>
+        @endforeach
     </div>
     @endforeach
 
