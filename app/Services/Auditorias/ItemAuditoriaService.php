@@ -45,30 +45,37 @@ class ItemAuditoriaService
 
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
-                        'tipo' => 'Ação Realizada',
+                        'tipo' => 'Realizada em',
                         'descricao' => $dados['descricao_acao_realizada'][$realIndex][$pontoIndex] ?? '',
                         'ordem' => 3,
                     ]);
 
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
+                        'tipo' => 'Ação Realizada',
+                        'descricao' => $dados['descricao_acao_realizada'][$realIndex][$pontoIndex] ?? '',
+                        'ordem' => 4,
+                    ]);
+
+                    $this->itemAuditoriaRepository->salvar([
+                        'auditoria_id' => $auditoriaId,
                         'tipo' => 'Ação Sugestiva',
                         'descricao' => $dados['descricao_acao_sugestiva'][$realIndex][$pontoIndex] ?? '',
-                        'ordem' => 4,
+                        'ordem' => 5,
                     ]);
 
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Ação Complementar',
                         'descricao' => $dados['descricao_acao_complementar'][$realIndex][$pontoIndex] ?? '',
-                        'ordem' => 5,
+                        'ordem' => 6,
                     ]);
 
                     $this->itemAuditoriaRepository->salvar([
                         'auditoria_id' => $auditoriaId,
                         'tipo' => 'Prazo Estabelecido',
                         'descricao' => $dados['prazo_estabelecido'][$realIndex][$pontoIndex] ?? '',
-                        'ordem' => 6,
+                        'ordem' => 7,
                     ]);
 
                     $realIndex = (int) $realIndex;
