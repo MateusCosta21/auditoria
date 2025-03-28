@@ -106,6 +106,7 @@
                     <tr>
                         <th>Ponto Auditado</th>
                         <th>Orientação Realizada</th>
+                        <th>Realizada em</th>
                         <th>Ação Realizada</th>
                         <th>Ação Sugestiva</th>
                         <th>Ação Complementar</th>
