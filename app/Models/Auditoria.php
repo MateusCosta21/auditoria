@@ -26,6 +26,11 @@ class Auditoria extends Model
         return $this->belongsTo(Cliente::class, 'id_cliente');
     }
 
+    public function setores()
+{
+    return $this->hasMany(ItemAuditoria::class, 'auditoria_id')->where('tipo', 'Setor')->where('ordem', 0);
+}
+
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
